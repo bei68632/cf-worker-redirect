@@ -48,8 +48,28 @@ export async function handleRequest(request: Request): Promise<Response> {
 		}
 	})
 
-	const redirectTo = targetUrl.toString()
+		const redirectTo = targetUrl.toString()
 
-	// Redirect to the target URL
-	return Response.redirect(redirectTo, 301)
+	// 返回 HTML 即时跳转页面（状态码 200）
+	const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        window.location.replace("${redirectTo}");
+    </script>
+</head>
+<body></body>
+</html>`;
+
+	return new Response(htmlContent, {
+		status: 200,
+		headers: { 
+			'Content-Type': 'text/html; charset=utf-8',
+			'Cache-Control': 'no-cache, no-store, must-revalidate'
+		}
+	});
+
+
 }
